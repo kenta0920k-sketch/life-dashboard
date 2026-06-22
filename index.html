@@ -3,11 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>人生ダッシュボード</title>
+<title>けんたの人生ダッシュボード</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+}
+
+.card{
+background:#1e293b;
+border-radius:20px;
+padding:20px;
+margin-bottom:15px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+.percent{
+font-size:48px;
+font-weight:bold;
+text-align:center;
+}
+
+.label{
+text-align:center;
+opacity:0.8;
+margin-bottom:15px;
+}
+
+.progress{
+width:100%;
+height:20px;
+background:#334155;
+border-radius:999px;
+overflow:hidden;
+}
+
+.progress-bar{
+height:100%;
+background:#22c55e;
+width:0%;
+}
+
+.stat{
+display:flex;
+justify-content:space-between;
+margin:10px 0;
+}
+
+.check-item{
+display:flex;
+align-items:center;
+gap:10px;
+margin:12px 0;
+}
+
+input[type="checkbox"]{
+width:22px;
+height:22px;
+}
+</style>
 </head>
-<body style="background:#0f172a;color:white;font-family:sans-serif;text-align:center;padding-top:100px;">
+
+<body>
+
+<div class="container">
+
 <h1>人生ダッシュボード</h1>
-<p>GitHub Pages接続テスト成功！</p>
-<p><<p>けんたくん専用アプリ Ver.2</p>/p>
+
+<div class="card">
+<div class="percent" id="percent">0%</div>
+<div class="label">60歳までの人生進捗</div>
+
+<div class="progress">
+<div class="progress-bar" id="bar"></div>
+</div>
+</div>
+
+<div class="card">
+<div class="stat">
+<span>現在年齢</span>
+<span id="age"></span>
+</div>
+
+<div class="stat">
+<span>経過日数</span>
+<span id="elapsed"></span>
+</div>
+
+<div class="stat">
+<span>残り日数</span>
+<span id="remaining"></span>
+</div>
+</div>
+
+<div class="card">
+<h2>今日の習慣</h2>
+
+<div class="check-item">
+<input type="checkbox" id="habit1">
+<label for="habit1">読書30分</label>
+</div>
+
+<div class="check-item">
+<input type="checkbox" id="habit2">
+<label for="habit2">ストレッチ</label>
+</div>
+
+<div class="check-item">
+<input type="checkbox" id="habit3">
+<label for="habit3">背中呼吸</label>
+</div>
+
+<div class="check-item">
+<input type="checkbox" id="habit4">
+<label for="habit4">自炊</label>
+</div>
+
+<div class="check-item">
+<input type="checkbox" id="habit5">
+<label for="habit5">施工管理勉強</label>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const birth = new Date("2002-09-20");
+const target = new Date("2062-09-20");
+
+function updateDashboard(){
+
+const now = new Date();
+
+const totalLife = target - birth;
+const lived = now - birth;
+
+const percent = (lived / totalLife) * 100;
+
+document.getElementById("percent").textContent =
+percent.toFixed(2) + "%";
+
+document.getElementById("bar").style.width =
+percent + "%";
+
+const age =
+((now - birth) / (365.2425*24*60*60*1000));
+
+document.getElementById("age").textContent =
+age.toFixed(2) + "歳";
+
+const elapsedDays =
+Math.floor(lived / (1000*60*60*24));
+
+document.getElementById("elapsed").textContent =
+elapsedDays.toLocaleString() + "日";
+
+const remainingDays =
+Math.floor((target-now)/(1000*60*60*24));
+
+document.getElementById("remaining").textContent =
+remainingDays.toLocaleString() + "日";
+
+}
+
+updateDashboard();
+
+const habits = [
+"habit1",
+"habit2",
+"habit3",
+"habit4",
+"habit5"
+];
+
+habits.forEach(id=>{
+
+const checkbox =
+document.getElementById(id);
+
+checkbox.checked =
+localStorage.getItem(id)==="true";
+
+checkbox.addEventListener("change",()=>{
+localStorage.setItem(id,checkbox.checked);
+});
+
+});
+
+</script>
+
 </body>
 </html>
