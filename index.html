@@ -36,6 +36,10 @@ text-align:center;
 margin-bottom:20px;
 }
 
+h2{
+margin-bottom:15px;
+}
+
 .percent{
 font-size:48px;
 font-weight:bold;
@@ -60,6 +64,7 @@ overflow:hidden;
 height:100%;
 background:#22c55e;
 width:0%;
+transition:.5s;
 }
 
 .stat{
@@ -79,6 +84,37 @@ input[type="checkbox"]{
 width:22px;
 height:22px;
 }
+
+input[type="text"]{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin-top:10px;
+}
+
+button{
+cursor:pointer;
+}
+
+.add-btn{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#22c55e;
+color:white;
+font-size:16px;
+}
+
+.delete-btn{
+border:none;
+background:#ef4444;
+color:white;
+padding:6px 10px;
+border-radius:8px;
+}
 </style>
 </head>
 
@@ -89,15 +125,21 @@ height:22px;
 <h1>人生ダッシュボード</h1>
 
 <div class="card">
+
 <div class="percent" id="percent">0%</div>
-<div class="label">60歳までの人生進捗</div>
+
+<div class="label">
+60歳までの人生進捗
+</div>
 
 <div class="progress">
 <div class="progress-bar" id="bar"></div>
 </div>
+
 </div>
 
 <div class="card">
+
 <div class="stat">
 <span>現在年齢</span>
 <span id="age"></span>
@@ -112,35 +154,27 @@ height:22px;
 <span>残り日数</span>
 <span id="remaining"></span>
 </div>
+
 </div>
 
 <div class="card">
+
 <h2>今日の習慣</h2>
 
-<div class="check-item">
-<input type="checkbox" id="habit1">
-<label for="habit1">読書30分</label>
-</div>
+<div id="habitList"></div>
 
-<div class="check-item">
-<input type="checkbox" id="habit2">
-<label for="habit2">ストレッチ</label>
-</div>
+<input
+id="newHabit"
+type="text"
+placeholder="新しい習慣を入力"
+>
 
-<div class="check-item">
-<input type="checkbox" id="habit3">
-<label for="habit3">背中呼吸</label>
-</div>
-
-<div class="check-item">
-<input type="checkbox" id="habit4">
-<label for="habit4">自炊</label>
-</div>
-
-<div class="check-item">
-<input type="checkbox" id="habit5">
-<label for="habit5">施工管理勉強</label>
-</div>
+<button
+class="add-btn"
+onclick="addHabit()"
+>
+＋習慣を追加
+</button>
 
 </div>
 
@@ -158,7 +192,8 @@ const now = new Date();
 const totalLife = target - birth;
 const lived = now - birth;
 
-const percent = (lived / totalLife) * 100;
+const percent =
+(lived / totalLife) * 100;
 
 document.getElementById("percent").textContent =
 percent.toFixed(2) + "%";
@@ -167,19 +202,26 @@ document.getElementById("bar").style.width =
 percent + "%";
 
 const age =
-((now - birth) / (365.2425*24*60*60*1000));
+((now - birth) /
+(365.2425*24*60*60*1000));
 
 document.getElementById("age").textContent =
 age.toFixed(2) + "歳";
 
 const elapsedDays =
-Math.floor(lived / (1000*60*60*24));
+Math.floor(
+lived /
+(1000*60*60*24)
+);
 
 document.getElementById("elapsed").textContent =
 elapsedDays.toLocaleString() + "日";
 
 const remainingDays =
-Math.floor((target-now)/(1000*60*60*24));
+Math.floor(
+(target-now) /
+(1000*60*60*24)
+);
 
 document.getElementById("remaining").textContent =
 remainingDays.toLocaleString() + "日";
@@ -188,27 +230,107 @@ remainingDays.toLocaleString() + "日";
 
 updateDashboard();
 
-const habits = [
-"habit1",
-"habit2",
-"habit3",
-"habit4",
-"habit5"
+let habits =
+JSON.parse(
+localStorage.getItem("habits")
+) || [
+"読書30分",
+"ストレッチ",
+"背中呼吸",
+"自炊",
+"施工管理勉強"
 ];
 
-habits.forEach(id=>{
+function saveHabits(){
 
-const checkbox =
-document.getElementById(id);
+localStorage.setItem(
+"habits",
+JSON.stringify(habits)
+);
 
-checkbox.checked =
-localStorage.getItem(id)==="true";
+}
 
-checkbox.addEventListener("change",()=>{
-localStorage.setItem(id,checkbox.checked);
+function renderHabits(){
+
+const habitList =
+document.getElementById("habitList");
+
+habitList.innerHTML = "";
+
+habits.forEach((habit,index)=>{
+
+const checked =
+localStorage.getItem(
+"habit_check_"+index
+) === "true";
+
+const div =
+document.createElement("div");
+
+div.className = "check-item";
+
+div.innerHTML = `
+<input type="checkbox"
+${checked ? "checked" : ""}
+onchange="
+localStorage.setItem(
+'habit_check_${index}',
+this.checked
+)
+">
+
+<span style="flex:1;">
+${habit}
+</span>
+
+<button
+class="delete-btn"
+onclick="deleteHabit(${index})"
+>
+削除
+</button>
+`;
+
+habitList.appendChild(div);
+
 });
 
-});
+}
+
+function addHabit(){
+
+const input =
+document.getElementById("newHabit");
+
+const value =
+input.value.trim();
+
+if(!value) return;
+
+habits.push(value);
+
+saveHabits();
+
+input.value = "";
+
+renderHabits();
+
+}
+
+function deleteHabit(index){
+
+if(!confirm("削除しますか？"))
+return;
+
+habits.splice(index,1);
+
+saveHabits();
+
+renderHabits();
+
+}
+
+renderHabits();
 
 </script>
 
