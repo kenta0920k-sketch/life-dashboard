@@ -284,6 +284,30 @@ ${habit}
 </span>
 
 <button
+onclick="moveUp(${index})"
+style="
+border:none;
+background:#3b82f6;
+color:white;
+padding:6px 8px;
+border-radius:8px;
+">
+↑
+</button>
+
+<button
+onclick="moveDown(${index})"
+style="
+border:none;
+background:#3b82f6;
+color:white;
+padding:6px 8px;
+border-radius:8px;
+">
+↓
+</button>
+
+<button
 class="delete-btn"
 onclick="deleteHabit(${index})"
 >
@@ -343,7 +367,31 @@ renderHabits();
 }
 
 function deleteHabit(index){
+function moveUp(index){
 
+if(index === 0) return;
+
+[habits[index], habits[index - 1]] =
+[habits[index - 1], habits[index]];
+
+saveHabits();
+
+renderHabits();
+
+}
+
+function moveDown(index){
+
+if(index === habits.length - 1) return;
+
+[habits[index], habits[index + 1]] =
+[habits[index + 1], habits[index]];
+
+saveHabits();
+
+renderHabits();
+
+}
 if(!confirm("削除しますか？"))
 return;
 
