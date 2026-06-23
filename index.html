@@ -366,7 +366,6 @@ renderHabits();
 
 }
 
-function deleteHabit(index){
 function moveUp(index){
 
 if(index === 0) return;
@@ -392,6 +391,9 @@ saveHabits();
 renderHabits();
 
 }
+
+function deleteHabit(index){
+
 if(!confirm("削除しますか？"))
 return;
 
@@ -402,7 +404,6 @@ saveHabits();
 renderHabits();
 
 }
-
 renderHabits();
 
 </script>
