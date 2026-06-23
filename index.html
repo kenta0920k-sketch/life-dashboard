@@ -231,8 +231,14 @@ remainingDays.toLocaleString() + "日";
 updateDashboard();
 
 // 日付が変わったらチェックをリセット
+const now = new Date();
+
 const today =
-new Date().toISOString().split("T")[0];
+`${now.getFullYear()}-${
+String(now.getMonth()+1).padStart(2,'0')
+}-${
+String(now.getDate()).padStart(2,'0')
+}`;
 
 const lastReset =
 localStorage.getItem("lastResetDate");
@@ -362,7 +368,6 @@ habits.push(value);
 saveHabits();
 
 input.value = "";
-// 日付が変わったらチェックをリセット
 
 
 renderHabits();
