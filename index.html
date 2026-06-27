@@ -4,118 +4,187 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>けんたの人生ダッシュボード</title>
-
-  <link rel="icon" href="icon.png">
+<link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
 
-body{
-background:#0f172a;
-color:white;
-padding:20px;
+body {
+  background: #0f172a;
+  color: white;
+  padding: 20px;
 }
 
-.container{
-max-width:500px;
-margin:auto;
+.container {
+  max-width: 500px;
+  margin: auto;
 }
 
-.card{
-background:#1e293b;
-border-radius:20px;
-padding:20px;
-margin-bottom:15px;
+.card {
+  background: #1e293b;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 15px;
 }
 
-h1{
-text-align:center;
-margin-bottom:20px;
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-h2{
-margin-bottom:15px;
+h2 {
+  margin-bottom: 15px;
 }
 
-.percent{
-font-size:48px;
-font-weight:bold;
-text-align:center;
+.percent {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
 }
 
-.label{
-text-align:center;
-opacity:0.8;
-margin-bottom:15px;
+.label {
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 15px;
 }
 
-.progress{
-width:100%;
-height:20px;
-background:#334155;
-border-radius:999px;
-overflow:hidden;
+.progress {
+  width: 100%;
+  height: 20px;
+  background: #334155;
+  border-radius: 999px;
+  overflow: hidden;
 }
 
-.progress-bar{
-height:100%;
-background:#22c55e;
-width:0%;
-transition:.5s;
+.progress-bar {
+  height: 100%;
+  background: #22c55e;
+  width: 0%;
+  transition: 0.5s;
 }
 
-.stat{
-display:flex;
-justify-content:space-between;
-margin:10px 0;
+.stat {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
 }
 
-.check-item{
-display:flex;
-align-items:center;
-gap:10px;
-margin:12px 0;
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 10px;
+  background: #0f172a;
+  border-radius: 10px;
+  cursor: grab;
+  transition: all 0.2s;
+  user-select: none;
 }
 
-input[type="checkbox"]{
-width:22px;
-height:22px;
+.check-item:hover {
+  background: #1a2540;
 }
 
-input[type="text"]{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-margin-top:10px;
+.check-item:active {
+  cursor: grabbing;
 }
 
-button{
-cursor:pointer;
+.check-item.dragging {
+  opacity: 0.5;
 }
 
-.add-btn{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:10px;
-background:#22c55e;
-color:white;
-font-size:16px;
+.check-item.drag-over {
+  background: #22c55e;
+  opacity: 0.3;
+  border: 2px dashed #22c55e;
 }
 
-.delete-btn{
-border:none;
-background:#ef4444;
-color:white;
-padding:6px 10px;
-border-radius:8px;
+input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.add-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #22c55e;
+  color: white;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+.add-btn:hover {
+  background: #16a34a;
+}
+
+.delete-btn {
+  border: none;
+  background: #ef4444;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+.move-btn {
+  border: none;
+  background: #3b82f6;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.move-btn:hover {
+  background: #2563eb;
+}
+
+.edit-btn {
+  border: none;
+  background: #f59e0b;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.edit-btn:hover {
+  background: #d97706;
+}
+
+.habit-text {
+  flex: 1;
+}
+
+.button-group {
+  display: flex;
+  gap: 6px;
 }
 </style>
 </head>
@@ -127,328 +196,278 @@ border-radius:8px;
 <h1>人生ダッシュボード</h1>
 
 <div class="card">
-
-<div class="percent" id="percent">0%</div>
-
-<div class="label">
-60歳までの人生進捗
-</div>
-
-<div class="progress">
-<div class="progress-bar" id="bar"></div>
-</div>
-
+  <div class="percent" id="percent">0%</div>
+  <div class="label">60歳までの人生進捗</div>
+  <div class="progress">
+    <div class="progress-bar" id="bar"></div>
+  </div>
 </div>
 
 <div class="card">
-
-<div class="stat">
-<span>現在年齢</span>
-<span id="age"></span>
-</div>
-
-<div class="stat">
-<span>経過日数</span>
-<span id="elapsed"></span>
-</div>
-
-<div class="stat">
-<span>残り日数</span>
-<span id="remaining"></span>
-</div>
-
+  <div class="stat">
+    <span>現在年齢</span>
+    <span id="age"></span>
+  </div>
+  <div class="stat">
+    <span>経過日数</span>
+    <span id="elapsed"></span>
+  </div>
+  <div class="stat">
+    <span>残り日数</span>
+    <span id="remaining"></span>
+  </div>
 </div>
 
 <div class="card">
-
-<h2>今日の習慣</h2>
-
-<div id="habitList"></div>
-
-<input
-id="newHabit"
-type="text"
-placeholder="新しい習慣を入力"
->
-
-<button
-class="add-btn"
-onclick="addHabit()"
->
-＋習慣を追加
-</button>
-
+  <h2>今日の習慣</h2>
+  <div id="habitList"></div>
+  <input id="newHabit" type="text" placeholder="新しい習慣を入力">
+  <button class="add-btn" onclick="habitApp.addHabit()">＋習慣を追加</button>
 </div>
 
 </div>
 
 <script>
 
-const birth = new Date("2002-09-20");
-const target = new Date("2062-09-20");
-
-function updateDashboard(){
-
-const now = new Date();
-
-const totalLife = target - birth;
-const lived = now - birth;
-
-const percent =
-(lived / totalLife) * 100;
-
-document.getElementById("percent").textContent =
-percent.toFixed(2) + "%";
-
-document.getElementById("bar").style.width =
-percent + "%";
-
-const age =
-((now - birth) /
-(365.2425*24*60*60*1000));
-
-document.getElementById("age").textContent =
-age.toFixed(2) + "歳";
-
-const elapsedDays =
-Math.floor(
-lived /
-(1000*60*60*24)
-);
-
-document.getElementById("elapsed").textContent =
-elapsedDays.toLocaleString() + "日";
-
-const remainingDays =
-Math.floor(
-(target-now) /
-(1000*60*60*24)
-);
-
-document.getElementById("remaining").textContent =
-remainingDays.toLocaleString() + "日";
-
-}
-
-updateDashboard();
-
-// 日付が変わったらチェックをリセット
-const now = new Date();
-
-const today =
-`${now.getFullYear()}-${
-String(now.getMonth()+1).padStart(2,'0')
-}-${
-String(now.getDate()).padStart(2,'0')
-}`;
-
-const lastReset =
-localStorage.getItem("lastResetDate");
-
-if(lastReset !== today){
-
-Object.keys(localStorage).forEach(key => {
-
-if(key.startsWith("habit_check_")){
-
-localStorage.removeItem(key);
-
-}
-
-});
-
-localStorage.setItem(
-"lastResetDate",
-today
-);
-
-}
-
-let habits =
-JSON.parse(
-localStorage.getItem("habits")
-) || [
-"読書30分",
-"ストレッチ",
-"背中呼吸",
-"自炊",
-"施工管理勉強"
-];
-
-function saveHabits(){
-
-localStorage.setItem(
-"habits",
-JSON.stringify(habits)
-);
-
-}
-
-function renderHabits(){
-
-const habitList =
-document.getElementById("habitList");
-
-habitList.innerHTML = "";
-
-habits.forEach((habit,index)=>{
-
-const checked =
-localStorage.getItem(
-"habit_check_"+index
-) === "true";
-
-const div =
-document.createElement("div");
-
-div.className = "check-item";
-
-div.innerHTML = `
-<input type="checkbox"
-${checked ? "checked" : ""}
-onchange="
-localStorage.setItem(
-'habit_check_${index}',
-this.checked
-)
-">
-
-<span style="flex:1;">
-${habit}
-</span>
-
-<button
-onclick="moveUp(${index})"
-style="
-border:none;
-background:#3b82f6;
-color:white;
-padding:6px 8px;
-border-radius:8px;
-">
-↑
-</button>
-
-<button
-onclick="moveDown(${index})"
-style="
-border:none;
-background:#3b82f6;
-color:white;
-padding:6px 8px;
-border-radius:8px;
-">
-↓
-</button>
-
-<button
-onclick="editHabit(${index})"
-style="
-border:none;
-background:#f59e0b;
-color:white;
-padding:6px 10px;
-border-radius:8px;
-">
-編集
-</button>
-
-<button
-class="delete-btn"
-onclick="deleteHabit(${index})"
->
-削除
-</button>
-`;
-
-habitList.appendChild(div);
-
-});
-
-}
-
-function addHabit(){
-
-const input =
-document.getElementById("newHabit");
-
-const value =
-input.value.trim();
-
-if(!value) return;
-
-habits.push(value);
-
-saveHabits();
-
-input.value = "";
-
-
-renderHabits();
-
-}
-
-function moveUp(index){
-
-if(index === 0) return;
-
-[habits[index], habits[index - 1]] =
-[habits[index - 1], habits[index]];
-
-saveHabits();
-
-renderHabits();
-
-}
-
-function moveDown(index){
-
-if(index === habits.length - 1) return;
-
-[habits[index], habits[index + 1]] =
-[habits[index + 1], habits[index]];
-
-saveHabits();
-
-renderHabits();
-
-}
-function editHabit(index){
-
-const newName = prompt(
-"習慣名を変更",
-habits[index]
-);
-
-if(
-newName === null ||
-newName.trim() === ""
-){
-return;
-}
-
-habits[index] =
-newName.trim();
-
-saveHabits();
-
-renderHabits();
-
-}
-function deleteHabit(index){
-
-if(!confirm("削除しますか？"))
-return;
-
-habits.splice(index,1);
-
-saveHabits();
-
-renderHabits();
-
-}
-renderHabits();
+// =====================
+// 習慣アプリケーション
+// =====================
+
+const habitApp = {
+  // 定数
+  birth: new Date("2002-09-20"),
+  target: new Date("2062-09-20"),
   
+  // 状態
+  habits: [],
+  draggedIndex: null,
+
+  // =====================
+  // 初期化
+  // =====================
+
+  init() {
+    this.loadHabits();
+    this.resetChecksByJapanTime();
+    this.renderHabits();
+    this.updateDashboard();
+    setInterval(() => this.updateDashboard(), 1000);
+  },
+
+  // =====================
+  // ダッシュボード更新
+  // =====================
+
+  updateDashboard() {
+    const now = new Date();
+    const totalLife = this.target - this.birth;
+    const lived = now - this.birth;
+    const percent = (lived / totalLife) * 100;
+
+    document.getElementById("percent").textContent = percent.toFixed(2) + "%";
+    document.getElementById("bar").style.width = percent + "%";
+
+    const age = (lived / (365.2425 * 24 * 60 * 60 * 1000));
+    document.getElementById("age").textContent = age.toFixed(2) + "歳";
+
+    const elapsedDays = Math.floor(lived / (1000 * 60 * 60 * 24));
+    document.getElementById("elapsed").textContent = elapsedDays.toLocaleString() + "日";
+
+    const remainingDays = Math.floor((this.target - now) / (1000 * 60 * 60 * 24));
+    document.getElementById("remaining").textContent = remainingDays.toLocaleString() + "日";
+  },
+
+  // =====================
+  // 日本時間でのリセット管理
+  // =====================
+
+  getJapanDate() {
+    const now = new Date();
+    const jstDate = new Date(now.toLocaleString('ja-JP'));
+    return `${jstDate.getFullYear()}-${String(jstDate.getMonth() + 1).padStart(2, '0')}-${String(jstDate.getDate()).padStart(2, '0')}`;
+  },
+
+  resetChecksByJapanTime() {
+    const today = this.getJapanDate();
+    const lastReset = localStorage.getItem("lastResetDate");
+
+    if (lastReset !== today) {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith("habit_check_")) {
+          localStorage.removeItem(key);
+        }
+      });
+      localStorage.setItem("lastResetDate", today);
+    }
+  },
+
+  // =====================
+  // 習慣の保存・読み込み
+  // =====================
+
+  loadHabits() {
+    this.habits = JSON.parse(localStorage.getItem("habits")) || [
+      "読書30分",
+      "ストレッチ",
+      "背中呼吸",
+      "自炊",
+      "施工管理勉強"
+    ];
+  },
+
+  saveHabits() {
+    localStorage.setItem("habits", JSON.stringify(this.habits));
+  },
+
+  getHabitCheck(index) {
+    return localStorage.getItem(`habit_check_${index}`) === "true";
+  },
+
+  setHabitCheck(index, checked) {
+    if (checked) {
+      localStorage.setItem(`habit_check_${index}`, "true");
+    } else {
+      localStorage.removeItem(`habit_check_${index}`);
+    }
+  },
+
+  // =====================
+  // 習慣のレンダリング
+  // =====================
+
+  renderHabits() {
+    const habitList = document.getElementById("habitList");
+    habitList.innerHTML = "";
+
+    this.habits.forEach((habit, index) => {
+      const checked = this.getHabitCheck(index);
+      const div = document.createElement("div");
+      div.className = "check-item";
+      div.draggable = true;
+      div.dataset.index = index;
+
+      // ドラッグイベント
+      div.addEventListener("dragstart", (e) => this.onDragStart(e));
+      div.addEventListener("dragover", (e) => this.onDragOver(e));
+      div.addEventListener("drop", (e) => this.onDrop(e));
+      div.addEventListener("dragleave", (e) => this.onDragLeave(e));
+      div.addEventListener("dragend", (e) => this.onDragEnd(e));
+
+      div.innerHTML = `
+        <input type="checkbox" ${checked ? "checked" : ""}
+          onchange="habitApp.setHabitCheck(${index}, this.checked)">
+        <span class="habit-text">${habit}</span>
+        <div class="button-group">
+          <button class="move-btn" onclick="habitApp.moveUp(${index})">↑</button>
+          <button class="move-btn" onclick="habitApp.moveDown(${index})">↓</button>
+          <button class="edit-btn" onclick="habitApp.editHabit(${index})">編集</button>
+          <button class="delete-btn" onclick="habitApp.deleteHabit(${index})">削除</button>
+        </div>
+      `;
+
+      habitList.appendChild(div);
+    });
+  },
+
+  // =====================
+  // ドラッグ＆ドロップ
+  // =====================
+
+  onDragStart(e) {
+    this.draggedIndex = parseInt(e.target.closest(".check-item").dataset.index);
+    e.target.closest(".check-item").classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+  },
+
+  onDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    e.target.closest(".check-item")?.classList.add("drag-over");
+  },
+
+  onDragLeave(e) {
+    e.target.closest(".check-item")?.classList.remove("drag-over");
+  },
+
+  onDrop(e) {
+    e.preventDefault();
+    const targetElement = e.target.closest(".check-item");
+    if (!targetElement) return;
+
+    const targetIndex = parseInt(targetElement.dataset.index);
+
+    if (this.draggedIndex !== targetIndex) {
+      const draggedItem = this.habits[this.draggedIndex];
+      this.habits.splice(this.draggedIndex, 1);
+      this.habits.splice(targetIndex, 0, draggedItem);
+      this.saveHabits();
+      this.renderHabits();
+    }
+  },
+
+  onDragEnd(e) {
+    document.querySelectorAll(".check-item").forEach(item => {
+      item.classList.remove("dragging", "drag-over");
+    });
+  },
+
+  // =====================
+  // 習慣操作
+  // =====================
+
+  addHabit() {
+    const input = document.getElementById("newHabit");
+    const value = input.value.trim();
+
+    if (!value) return;
+
+    this.habits.push(value);
+    this.saveHabits();
+    input.value = "";
+    this.renderHabits();
+  },
+
+  moveUp(index) {
+    if (index === 0) return;
+
+    [this.habits[index], this.habits[index - 1]] = 
+    [this.habits[index - 1], this.habits[index]];
+
+    this.saveHabits();
+    this.renderHabits();
+  },
+
+  moveDown(index) {
+    if (index === this.habits.length - 1) return;
+
+    [this.habits[index], this.habits[index + 1]] = 
+    [this.habits[index + 1], this.habits[index]];
+
+    this.saveHabits();
+    this.renderHabits();
+  },
+
+  editHabit(index) {
+    const newName = prompt("習慣名を変��", this.habits[index]);
+
+    if (newName === null || newName.trim() === "") return;
+
+    this.habits[index] = newName.trim();
+    this.saveHabits();
+    this.renderHabits();
+  },
+
+  deleteHabit(index) {
+    if (!confirm("削除しますか?")) return;
+
+    this.habits.splice(index, 1);
+    this.saveHabits();
+    this.renderHabits();
+  }
+};
+
+// アプリ起動
+habitApp.init();
 
 </script>
 
